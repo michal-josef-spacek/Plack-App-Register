@@ -27,7 +27,6 @@ sub _message {
 	if (defined $self->message) {
 		$self->message->($env, $message_type, $message);
 	}
-	$env->{'psgi.errors'}->print("$message\n");
 
 	return;
 }
