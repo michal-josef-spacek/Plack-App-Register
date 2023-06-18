@@ -22,10 +22,10 @@ sub _css {
 }
 
 sub _message {
-	my ($self, $env, $message) = @_;
+	my ($self, $env, $message_type, $message) = @_;
 
 	if (defined $self->message) {
-		$self->message->($env, $message);
+		$self->message->($env, $message_type, $message);
 	}
 	$env->{'psgi.errors'}->print("$message\n");
 
@@ -89,23 +89,23 @@ sub _register_check {
 	if (! exists $body_parameters_hr->{'register'}
 		|| $body_parameters_hr->{'register'} ne 'register') {
 
-		$self->_message($env, 'There is no register POST.');
+		$self->_message($env, 'error', 'There is no register POST.');
 		return 0;
 	}
 	if (! defined $body_parameters_hr->{'username'} || ! $body_parameters_hr->{'username'}) {
-		$self->_message($env, "Parameter 'username' doesn't defined.");
+		$self->_message($env, 'error', "Parameter 'username' doesn't defined.");
 		return 0;
 	}
 	if (! defined $body_parameters_hr->{'password1'} || ! $body_parameters_hr->{'password1'}) {
-		$self->_message($env, "Parameter 'password1' doesn't defined.");
+		$self->_message($env, 'error', "Parameter 'password1' doesn't defined.");
 		return 0;
 	}
 	if (! defined $body_parameters_hr->{'password2'} || ! $body_parameters_hr->{'password2'}) {
-		$self->_message($env, "Parameter 'password2' doesn't defined.");
+		$self->_message($env, 'error', "Parameter 'password2' doesn't defined.");
 		return 0;
 	}
 	if ($body_parameters_hr->{'password1'} ne $body_parameters_hr->{'password2'}) {
-		$self->_message($env, 'Passwords are not same.');
+		$self->_message($env, 'error', 'Passwords are not same.');
 		return 0;
 	}
 
