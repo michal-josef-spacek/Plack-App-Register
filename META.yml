@@ -26,13 +26,10 @@ no_index:
     - t
     - xt
 requires:
-  CSS::Struct::Output::Raw: 0
+  Plack::Component::Tags::HTML: 0.13
   Plack::Util::Accessor: 0
-  Tags::HTML::Login::Button: 0
-  Tags::HTML::Page::Begin: 0.1
-  Tags::HTML::Page::End: 0.04
-  Tags::Output::Raw: 0
-  Unicode::UTF8: 0
+  Tags::HTML::Container: 0
+  Tags::HTML::Login::Register: 0
   perl: 5.8.0
 resources:
   bugtracker: https://github.com/michal-josef-spacek/Plack-App-Register/issues

@@ -1,98 +1,112 @@
 package Plack::App::Register;
 
-use base qw(Plack::Component);
+use base qw(Plack::Component::Tags::HTML);
 use strict;
 use warnings;
 
-use CSS::Struct::Output::Raw;
-use Plack::Util::Accessor qw(css generator login_link login_title tags title);
-use Tags::HTML::Login::Button;
-use Tags::HTML::Page::Begin;
-use Tags::HTML::Page::End;
-use Tags::Output::Raw;
-use Unicode::UTF8 qw(decode_utf8 encode_utf8);
+use Plack::Util::Accessor qw(generator redirect_register redirect_error register title);
+use Tags::HTML::Container;
+use Tags::HTML::Login::Register;
 
 our $VERSION = 0.01;
-
-sub call {
-	my ($self, $env) = @_;
-
-	$self->_tags;
-	$self->tags->finalize;
-	my $content = encode_utf8($self->tags->flush(1));
-
-	return [
-		200,
-		[
-			'content-type' => 'text/html; charset=utf-8',
-		],
-		[$content],
-	];
-}
-
-sub prepare_app {
-	my $self = shift;
-
-	if (! $self->css || ! $self->css->isa('CSS::Struct::Output')) {
-		$self->css(CSS::Struct::Output::Raw->new);
-	}
-
-	if (! $self->tags || ! $self->tags->isa('Tags::Output')) {
-		$self->tags(Tags::Output::Raw->new('xml' => 1));
-	}
-
-	if (! $self->generator) {
-		$self->generator(__PACKAGE__.'; Version: '.$VERSION);
-	}
-
-	if (! $self->title) {
-		$self->title('Login page');
-	}
-
-	if (! $self->login_link) {
-		$self->login_link('login');
-	}
-
-	if (! $self->login_title) {
-		$self->login_title('LOGIN');
-	}
-
-	# Tags helper for login button.
-	$self->{'_login_button'} = Tags::HTML::Login::Button->new(
-		'css' => $self->css,
-		'link' => $self->login_link,
-		'tags' => $self->tags,
-		'title' => $self->login_title,
-	);
-
-	return;
-}
 
 sub _css {
 	my $self = shift;
 
-	$self->{'_login_button'}->process_css;
+	$self->{'_container'}->process_css;
+	$self->{'_login_register'}->process_css;
 
 	return;
 }
 
-sub _tags {
+sub _prepare_app {
 	my $self = shift;
 
-	$self->_css;
+	# Defaults which rewrite defaults in module which I am inheriting.
+	if (! defined $self->generator) {
+		$self->generator(__PACKAGE__.'; Version: '.$VERSION);
+	}
 
-	Tags::HTML::Page::Begin->new(
+	if (! defined $self->title) {
+		$self->title('Register page');
+	}
+
+	# Inherite defaults.
+	$self->SUPER::_prepare_app;
+
+	# Defaults from this module.
+	my %p = (
 		'css' => $self->css,
-		'generator' => $self->generator,
-		'lang' => {
-			'title' => $self->title,
+		'tags' => $self->tags,
+	);
+	$self->{'_login_register'} = Tags::HTML::Login::Register->new(%p);
+	$self->{'_container'} = Tags::HTML::Container->new(%p);
+
+	return;
+}
+
+sub _process_actions {
+	my ($self, $env) = @_;
+
+	if (defined $self->register) {
+		$env->{'psgi.errors'}->print("Register\n");
+		my $req = Plack::Request->new($env);
+		my $res = Plack::Response->new;
+		my $body_params_hr = $req->body_parameters;
+		my ($status, $messages_ar) = $self->_register_check($body_params_hr);
+		$env->{'psgi.errors'}->print("Status: $status\n");
+		$env->{'psgi.errors'}->print("Messages: ".(join "|", @{$messages_ar})."\n");
+		# TODO Save messages to session.
+		if ($status) {
+			if ($self->register->($env, $body_params_hr->{'username'},
+				$body_params_hr->{'password1'})) {
+
+				$res->redirect($self->redirect_register);
+			} else {
+				$res->redirect($self->redirect_error);
+			}
+			$self->psgi_app($res->finalize);
+		}
+	}
+
+	return;
+}
+
+sub _register_check {
+	my ($self, $body_parameters_hr) = @_;
+
+	if (! defined $body_parameters_hr) {
+		return (0, ['No POST.']);
+	}
+	if (! exists $body_parameters_hr->{'register'}
+		|| $body_parameters_hr->{'register'} ne 'register') {
+
+		return (0, ['There is no register POST.']);
+	}
+	if (! defined $body_parameters_hr->{'username'}) {
+		return (0, ["Parameter 'username' doesn't defined."]);
+	}
+	if (! defined $body_parameters_hr->{'password1'}) {
+		return (0, ["Parameter 'password1' doesn't defined."]);
+	}
+	if (! defined $body_parameters_hr->{'password2'}) {
+		return (0, ["Parameter 'password2' doesn't defined."]);
+	}
+	if ($body_parameters_hr->{'password1'} ne $body_parameters_hr->{'password2'}) {
+		return (0, ['Passwords are not same.']);
+	}
+
+	return (1, []);
+}
+
+sub _tags_middle {
+	my $self = shift;
+
+	$self->{'_container'}->process(
+		sub {
+			$self->{'_login_register'}->process;
 		},
-		'tags' => $self->tags,
-	)->process;
-	$self->{'_login_button'}->process;
-	Tags::HTML::Page::End->new(
-		'tags' => $self->tags,
-	)->process;
+	);
 
 	return;
 }
