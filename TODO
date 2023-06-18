@@ -1,7 +1,8 @@
 TODO
 ====
 1. Pouzit Tags::HTML::Login::Register
-2.
+2. Add message to page. If registering failed, we need to print info.
+3.
 
 Applied
 =======
