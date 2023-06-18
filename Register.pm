@@ -4,7 +4,9 @@ use base qw(Plack::Component::Tags::HTML);
 use strict;
 use warnings;
 
-use Plack::Util::Accessor qw(generator redirect_register redirect_error register title);
+use Plack::Util::Accessor qw(generator message redirect_register redirect_error register title);
+use Plack::Request;
+use Plack::Response;
 use Tags::HTML::Container;
 use Tags::HTML::Login::Register;
 
@@ -15,6 +17,17 @@ sub _css {
 
 	$self->{'_container'}->process_css;
 	$self->{'_login_register'}->process_css;
+
+	return;
+}
+
+sub _message {
+	my ($self, $env, $message) = @_;
+
+	if (defined $self->message) {
+		$self->message->($env, $message);
+	}
+	$env->{'psgi.errors'}->print("$message\n");
 
 	return;
 }
@@ -48,15 +61,11 @@ sub _prepare_app {
 sub _process_actions {
 	my ($self, $env) = @_;
 
-	if (defined $self->register) {
-		$env->{'psgi.errors'}->print("Register\n");
+	if (defined $self->register && $env->{'REQUEST_METHOD'} eq 'POST') {
 		my $req = Plack::Request->new($env);
-		my $res = Plack::Response->new;
 		my $body_params_hr = $req->body_parameters;
-		my ($status, $messages_ar) = $self->_register_check($body_params_hr);
-		$env->{'psgi.errors'}->print("Status: $status\n");
-		$env->{'psgi.errors'}->print("Messages: ".(join "|", @{$messages_ar})."\n");
-		# TODO Save messages to session.
+		my ($status, $messages_ar) = $self->_register_check($env, $body_params_hr);
+		my $res = Plack::Response->new;
 		if ($status) {
 			if ($self->register->($env, $body_params_hr->{'username'},
 				$body_params_hr->{'password1'})) {
@@ -65,38 +74,42 @@ sub _process_actions {
 			} else {
 				$res->redirect($self->redirect_error);
 			}
-			$self->psgi_app($res->finalize);
+		} else {
+			$res->redirect($self->redirect_error);
 		}
+		$self->psgi_app($res->finalize);
 	}
 
 	return;
 }
 
 sub _register_check {
-	my ($self, $body_parameters_hr) = @_;
+	my ($self, $env, $body_parameters_hr) = @_;
 
-	if (! defined $body_parameters_hr) {
-		return (0, ['No POST.']);
-	}
 	if (! exists $body_parameters_hr->{'register'}
 		|| $body_parameters_hr->{'register'} ne 'register') {
 
-		return (0, ['There is no register POST.']);
+		$self->_message($env, 'There is no register POST.');
+		return 0;
 	}
-	if (! defined $body_parameters_hr->{'username'}) {
-		return (0, ["Parameter 'username' doesn't defined."]);
+	if (! defined $body_parameters_hr->{'username'} || ! $body_parameters_hr->{'username'}) {
+		$self->_message($env, "Parameter 'username' doesn't defined.");
+		return 0;
 	}
-	if (! defined $body_parameters_hr->{'password1'}) {
-		return (0, ["Parameter 'password1' doesn't defined."]);
+	if (! defined $body_parameters_hr->{'password1'} || ! $body_parameters_hr->{'password1'}) {
+		$self->_message($env, "Parameter 'password1' doesn't defined.");
+		return 0;
 	}
-	if (! defined $body_parameters_hr->{'password2'}) {
-		return (0, ["Parameter 'password2' doesn't defined."]);
+	if (! defined $body_parameters_hr->{'password2'} || ! $body_parameters_hr->{'password2'}) {
+		$self->_message($env, "Parameter 'password2' doesn't defined.");
+		return 0;
 	}
 	if ($body_parameters_hr->{'password1'} ne $body_parameters_hr->{'password2'}) {
-		return (0, ['Passwords are not same.']);
+		$self->_message($env, 'Passwords are not same.');
+		return 0;
 	}
 
-	return (1, []);
+	return 1;
 }
 
 sub _tags_middle {

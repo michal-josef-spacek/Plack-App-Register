@@ -27,6 +27,8 @@ no_index:
     - xt
 requires:
   Plack::Component::Tags::HTML: 0.13
+  Plack::Request: 0
+  Plack::Response: 0
   Plack::Util::Accessor: 0
   Tags::HTML::Container: 0
   Tags::HTML::Login::Register: 0
