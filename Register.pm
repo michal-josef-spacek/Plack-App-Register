@@ -69,6 +69,8 @@ sub _process_actions {
 			if ($self->register->($env, $body_params_hr->{'username'},
 				$body_params_hr->{'password1'})) {
 
+				$self->_message($env, 'info',
+					"User '$body_params_hr->{'username'}' is registered.");
 				$res->redirect($self->redirect_register);
 			} else {
 				$res->redirect($self->redirect_error);
