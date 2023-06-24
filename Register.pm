@@ -4,7 +4,7 @@ use base qw(Plack::Component::Tags::HTML);
 use strict;
 use warnings;
 
-use Plack::Util::Accessor qw(generator message redirect_register redirect_error register title);
+use Plack::Util::Accessor qw(generator message_cb redirect_register redirect_error register_cb title);
 use Plack::Request;
 use Plack::Response;
 use Plack::Session;
@@ -28,8 +28,8 @@ sub _css {
 sub _message {
 	my ($self, $env, $message_type, $message) = @_;
 
-	if (defined $self->message) {
-		$self->message->($env, $message_type, $message);
+	if (defined $self->message_cb) {
+		$self->message_cb->($env, $message_type, $message);
 	}
 
 	return;
@@ -64,13 +64,13 @@ sub _prepare_app {
 sub _process_actions {
 	my ($self, $env) = @_;
 
-	if (defined $self->register && $env->{'REQUEST_METHOD'} eq 'POST') {
+	if (defined $self->register_cb && $env->{'REQUEST_METHOD'} eq 'POST') {
 		my $req = Plack::Request->new($env);
 		my $body_params_hr = $req->body_parameters;
 		my ($status, $messages_ar) = $self->_register_check($env, $body_params_hr);
 		my $res = Plack::Response->new;
 		if ($status) {
-			if ($self->register->($env, $body_params_hr->{'username'},
+			if ($self->register_cb->($env, $body_params_hr->{'username'},
 				$body_params_hr->{'password1'})) {
 
 				$self->_message($env, 'info',
