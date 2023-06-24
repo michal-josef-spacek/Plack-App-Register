@@ -16,6 +16,7 @@ MANIFEST			This list of files
 META.yml
 README
 Register.pm
+SIGNATURE
 t/Plack-App-Register/01-use.t
 t/Plack-App-Register/02-version.t
 xt/Plack-App-Register/01-pod_coverage.t
