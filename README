@@ -208,6 +208,9 @@ SEE ALSO
     Plack::App::Login
         Plack login application.
 
+    Plack::App::Login::Password
+        Plack login/password application.
+
 REPOSITORY
     <https://github.com/michal-josef-spacek/Plack-App-Register>
 

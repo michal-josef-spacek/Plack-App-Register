@@ -372,6 +372,10 @@ L<Tags::HTML::Login::Register>.
 
 Plack login application.
 
+=item L<Plack::App::Login::Password>
+
+Plack login/password application.
+
 =back
 
 =head1 REPOSITORY
