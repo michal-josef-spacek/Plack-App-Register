@@ -3,7 +3,9 @@ TODO
 3. Add tests.
 4. Add ERRORS section to doc.
 5. Add image of app to doc.
-6.
+6. Improve _tags_middle processing of message. This couldn't be a
+Data::Message::Simple instance. Callback?
+7.
 
 Applied
 =======
