@@ -13,7 +13,7 @@ use Tags::HTML::Login::Register;
 our $VERSION = 0.01;
 
 sub _css {
-	my $self = shift;
+	my ($self, $env) = @_;
 
 	$self->{'_container'}->process_css;
 	$self->{'_login_register'}->process_css;
@@ -114,7 +114,7 @@ sub _register_check {
 }
 
 sub _tags_middle {
-	my $self = shift;
+	my ($self, $env) = @_;
 
 	$self->{'_container'}->process(
 		sub {

@@ -18,7 +18,7 @@ name 'Plack-App-Register';
 perl_version 5.008;
 readme_from 'Register.pm';
 recursive_author_tests('xt');
-requires 'Plack::Component::Tags::HTML' => 0.13;
+requires 'Plack::Component::Tags::HTML' => 0.15;
 requires 'Plack::Util::Accessor' => 0;
 requires 'Plack::Request' => 0;
 requires 'Plack::Response' => 0;
