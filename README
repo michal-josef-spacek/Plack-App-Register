@@ -92,9 +92,9 @@ EXAMPLE
      # TODO
 
 DEPENDENCIES
-    CSS::Struct::Output::Raw, Plack::Util::Accessor,
-    Tags::HTML::Login::Button, Tags::HTML::Page::Begin,
-    Tags::HTML::Page::End, Tags::Output::Raw, Unicode::UTF8.
+    Plack::Component::Tags::HTML, Plack::Request, Plack::Response,
+    Plack::Session, Plack::Util::Accessor, Tags::HTML::Container,
+    Tags::HTML::Login::Register.
 
 SEE ALSO
     Plack::App::Login

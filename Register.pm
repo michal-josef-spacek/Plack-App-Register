@@ -249,13 +249,13 @@ Returns Plack::Component object.
 
 =head1 DEPENDENCIES
 
-L<CSS::Struct::Output::Raw>,
+L<Plack::Component::Tags::HTML>,
+L<Plack::Request>,
+L<Plack::Response>,
+L<Plack::Session>,
 L<Plack::Util::Accessor>,
-L<Tags::HTML::Login::Button>,
-L<Tags::HTML::Page::Begin>,
-L<Tags::HTML::Page::End>,
-L<Tags::Output::Raw>,
-L<Unicode::UTF8>.
+L<Tags::HTML::Container>,
+L<Tags::HTML::Login::Register>.
 
 =head1 SEE ALSO
 
