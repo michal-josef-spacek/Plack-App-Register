@@ -16,17 +16,67 @@ METHODS
 
     Returns instance of object.
 
+    *       "author"
+
+            Author string to HTML head.
+
+            Default value is undef.
+
+    *       "content_type"
+
+            Content type for output.
+
+            Default value is 'text/html; charset=__ENCODING__'.
+
     *       "css"
 
             Instance of CSS::Struct::Output object.
 
             Default value is CSS::Struct::Output::Raw instance.
 
+    *       "css_init"
+
+            Reference to array with CSS::Struct structure.
+
+            Default value is CSS initialization from Tags::HTML::Page::Begin
+            like
+
+             * {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+             }
+
+    *       "encoding"
+
+            Set encoding for output.
+
+            Default value is 'utf-8'.
+
+    *       "favicon"
+
+            Link to favicon.
+
+            Default value is undef.
+
+    *       "flag_begin"
+
+            Flag that means begin of html writing via
+            Tags::HTML::Page::Begin.
+
+            Default value is 1.
+
+    *       "flag_end"
+
+            Flag that means end of html writing via Tags::HTML::Page::End.
+
+            Default value is 1.
+
     *       "generator"
 
             HTML generator string.
 
-            Default value is 'Plack::App::Login; Version: __VERSION__'.
+            Default value is 'Plack::App::Register; Version: __VERSION__'.
 
     *       "login_link"
 
@@ -40,17 +90,75 @@ METHODS
 
             Default value is 'LOGIN'.
 
+    *       "message_cb"
+
+            Callback to process message from application. Arguments for
+            callback are: $env, $message_type and $message. Returns undef.
+
+            Default value is undef.
+
+    *       "psgi_app"
+
+            PSGI application to run instead of normal process. Intent of
+            this is change application in "_process_actions" method.
+
+            Default value is undef.
+
+    *       "redirect_register"
+
+            Redirect URL after successful registering.
+
+            Default value is undef.
+
+    *       "redirect_error"
+
+            Redirect URL after error in registering.
+
+            Default value is undef.
+
+    *       "register_cb"
+
+            Callback for main registering. Arguments for callback are: $env,
+            "username" and $password. Returns 0/1 for (un)successful
+            registration.
+
+            Default value is undef.
+
+    *       "script_js"
+
+            Reference to array with Javascript code strings.
+
+            Default value is [].
+
+    *       "script_js_src"
+
+            Reference to array with Javascript URLs.
+
+            Default value is [].
+
+    *       "status_code"
+
+            HTTP status code.
+
+            Default value is 200.
+
     *       "tags"
 
             Instance of Tags::Output object.
 
-            Default value is Tags::Output::Raw->new('xml' => 1) instance.
+            Default value is
+
+             Tags::Output::Raw->new(
+                     'xml' => 1,
+                     'no_simple' => ['script', 'textarea'],
+                     'preserved' => ['pre', 'style'],
+             );
 
     *       "title"
 
             Page title.
 
-            Default value is 'Login page'.
+            Default value is 'Register page'.
 
   "call"
      my $psgi_ar = $obj->call($env);
