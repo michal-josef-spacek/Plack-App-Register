@@ -7,6 +7,7 @@ use warnings;
 use Plack::Util::Accessor qw(generator message redirect_register redirect_error register title);
 use Plack::Request;
 use Plack::Response;
+use Plack::Session;
 use Tags::HTML::Container;
 use Tags::HTML::Login::Register;
 
@@ -16,7 +17,10 @@ sub _css {
 	my ($self, $env) = @_;
 
 	$self->{'_container'}->process_css;
-	$self->{'_login_register'}->process_css;
+	$self->{'_login_register'}->process_css({
+		'info' => 'blue',
+		'error' => 'red',
+	});
 
 	return;
 }
@@ -116,9 +120,15 @@ sub _register_check {
 sub _tags_middle {
 	my ($self, $env) = @_;
 
+	my $messages_ar = [];
+	if (exists $env->{'psgix.session'}) {
+		my $session = Plack::Session->new($env);
+		$messages_ar = $session->get('messages');
+		$session->set('messages', []);
+	}
 	$self->{'_container'}->process(
 		sub {
-			$self->{'_login_register'}->process;
+			$self->{'_login_register'}->process($messages_ar);
 		},
 	);
 

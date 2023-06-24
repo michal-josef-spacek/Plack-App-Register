@@ -1,9 +1,11 @@
 TODO
 ====
-2. Add message to page. If registering failed, we need to print info.
 3.
 
 Applied
 =======
 1. Pouzit Tags::HTML::Login::Register
 OK [20230618] skim
+
+2. Add message to page. If registering failed, we need to print info.
+OK [20230624] skim
