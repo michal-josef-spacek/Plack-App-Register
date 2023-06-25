@@ -78,18 +78,6 @@ METHODS
 
             Default value is 'Plack::App::Register; Version: __VERSION__'.
 
-    *       "login_link"
-
-            Login link.
-
-            Default value is 'login'.
-
-    *       "login_title"
-
-            Login title.
-
-            Default value is 'LOGIN'.
-
     *       "message_cb"
 
             Callback to process message from application. Arguments for

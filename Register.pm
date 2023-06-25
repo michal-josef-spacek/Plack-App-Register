@@ -227,18 +227,6 @@ HTML generator string.
 
 Default value is 'Plack::App::Register; Version: __VERSION__'.
 
-=item * C<login_link>
-
-Login link.
-
-Default value is 'login'.
-
-=item * C<login_title>
-
-Login title.
-
-Default value is 'LOGIN'.
-
 =item * C<message_cb>
 
 Callback to process message from application.
