@@ -1,6 +1,7 @@
 0.02
  - Improve and fix example in doc.
  - Remove bad constructor parameters.
+ - Update minimal version of Tags::HTML::Login::Register to 0.03.
 
 0.01 2023-06-24T18:07:21+02:00
  - First version.
