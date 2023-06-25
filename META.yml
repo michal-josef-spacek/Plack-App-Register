@@ -33,7 +33,7 @@ requires:
   Plack::Session: 0
   Plack::Util::Accessor: 0
   Tags::HTML::Container: 0
-  Tags::HTML::Login::Register: 0.03
+  Tags::HTML::Login::Register: 0.04
   perl: 5.8.0
 resources:
   bugtracker: https://github.com/michal-josef-spacek/Plack-App-Register/issues
