@@ -2,7 +2,6 @@ TODO
 ====
 3. Add tests.
 4. Add ERRORS section to doc.
-5. Add image of app to doc.
 6. Improve _tags_middle processing of message. This couldn't be a
 Data::Message::Simple instance. Callback?
 7.
@@ -14,3 +13,6 @@ OK [20230618] skim
 
 2. Add message to page. If registering failed, we need to print info.
 OK [20230624] skim
+
+5. Add image of app to doc.
+OK [20240106] skim

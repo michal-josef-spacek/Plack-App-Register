@@ -455,6 +455,14 @@ Returns Plack::Component object.
  #   </body>
  # </html>
 
+=begin html
+
+<a href="https://raw.githubusercontent.com/michal-josef-spacek/Plack-App-Register/master/images/register_psgi_screenshot.png">
+  <img src="https://raw.githubusercontent.com/michal-josef-spacek/Plack-App-Register/master/images/register_psgi_screenshot.png" alt="Example screenshot" width="300px" height="300px" />
+</a>
+
+=end html
+
 =head1 DEPENDENCIES
 
 L<Plack::Component::Tags::HTML>,
