@@ -163,8 +163,6 @@ Plack::App::Register - Plack register application.
 
 Constructor.
 
-Returns instance of object.
-
 =over 8
 
 =item * C<author>
@@ -299,6 +297,8 @@ Page title.
 Default value is 'Register page'.
 
 =back
+
+Returns instance of object.
 
 =head2 C<call>
 
