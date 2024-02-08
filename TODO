@@ -5,7 +5,8 @@ TODO
 6. Improve _tags_middle processing of message. This couldn't be a
 Data::Message::Simple instance. Callback?
 7. Add accessor for texts.
-8.
+8. Rewrite tests to Tags::Output::Structure.
+9.
 
 Applied
 =======
