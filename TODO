@@ -6,7 +6,8 @@ TODO
 Data::Message::Simple instance. Callback?
 7. Add accessor for texts.
 8. Rewrite tests to Tags::Output::Structure.
-9.
+9. Image to doc.
+10.
 
 Applied
 =======
