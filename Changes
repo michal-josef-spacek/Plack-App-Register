@@ -1,5 +1,6 @@
 0.04
  - Improve doc.
+ - Update to new Tags::HTML::Login::Register.
 
 0.03 2024-01-06T14:08:39+01:00
  - Add basic tests.
