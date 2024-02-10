@@ -1,4 +1,5 @@
 0.04
+ - Add return after redirect. Better for future improvements.
  - Improve doc.
  - Update to new Tags::HTML::Login::Register.
 
